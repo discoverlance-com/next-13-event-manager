@@ -21,6 +21,10 @@ An event manager app with authentication and database with Neon
    - On the frontend run the command, `npm install`
    - On the backend run the command, `composer install`
 
+3. Backend Extra Steps (Perform only once)
+   - Perform migrations `php artisan migrate` (accept to create sqlite database file if you are using sqlite)
+   - Link the storage directory to public `php artisan storage:link`
+
 ### Starting Project
 
 1. Start the api with the command, `php artisan serve`
