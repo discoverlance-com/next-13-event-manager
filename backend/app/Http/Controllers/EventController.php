@@ -26,7 +26,7 @@ class EventController extends Controller
     public function store(UpsertEventRequest $request)
     {
         $data = $request->validated();
-        $event = Event::create([...$data, 'user_id' => 1]);
+        $event = Event::create([...$data, 'user_id' => $request->user()]);
 
         return response()->json($event, 201);
     }
@@ -45,7 +45,7 @@ class EventController extends Controller
     public function update(UpsertEventRequest $request, Event $event)
     {
         $data = $request->validated();
-        $event->update([...$data, 'user_id' => 1]);
+        $event->update([...$data, $request->user()]);
 
         return response()->json([], 204);
     }
