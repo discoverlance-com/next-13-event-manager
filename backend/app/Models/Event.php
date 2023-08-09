@@ -3,8 +3,10 @@
 namespace App\Models;
 
 use App\Enum\EventStatus;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Event extends Model
 {
@@ -31,7 +33,28 @@ class Event extends Model
         'status' => EventStatus::class,
     ];
 
-    public function author()
+    protected static function booted()
     {
+        static::saving(function (Event $event) {
+            $event['slug'] = str($event['title'])->slug();
+        });
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
+    /**
+     * Scope a query to only include events that have not ended
+     */
+    public function scopeUpToDate(Builder $query): void
+    {
+        $query->where('end_at', '>', now())->whereNot('status', EventStatus::ARCHIVE);
+    }
+
+    public function author(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }

@@ -27,14 +27,8 @@ class EventFactory extends Factory
             //
             'title' => $title,
             'start_at' => $start_at,
-            'end_at' => $this->faker->dateTimeBetween($start_at, $start_at->format('Y-m-d H:i:s').' +1 month', 'utc'),
-            'image_path' => $this->faker->image(
-                dir: storage_path('app/public'),
-                width: 360,
-                height: 360,
-                randomize: true,
-                fullPath: true,
-            ),
+            'end_at' => $this->faker->dateTimeBetween($start_at, $start_at->format('Y-m-d H:i:s') . ' +1 month', 'utc'),
+            'image_path' => 'events/images/7b1afb4381e26b8e474a3dadd14a8ef8.png',
             'tags' => $this->faker->randomElements(
                 [
                     'Laundry',
