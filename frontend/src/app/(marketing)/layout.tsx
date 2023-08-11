@@ -8,7 +8,7 @@ export default function MarketingLayout({
   return (
     <div className="min-h-screen">
       <MainNav />
-      <main className="mt-12 max-w-6xl mx-auto px-8">{children}</main>
+      <main className="mt-12 max-w-6xl mx-auto px-8 mb-16">{children}</main>
     </div>
   );
 }
