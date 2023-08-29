@@ -3,6 +3,7 @@ import { demoEvents } from "../../demo-events";
 
 import { Metadata, ResolvingMetadata } from "next";
 import Image from "next/image";
+import { apiRoutes } from "~/lib/api";
 
 type Props = {
   params: { slug: string };
@@ -22,19 +23,27 @@ export async function generateMetadata(
   // optionally access and extend (rather than replace) parent metadata
   const previousImages = (await parent).openGraph?.images || [];
 
+  const images = event?.data?.image_url
+    ? new URL(event.data.image_url)
+    : previousImages;
+
   return {
-    title: event?.title,
-    description: event?.description.slice(0, 160),
+    title: event?.data?.title,
+    description: event?.data?.description?.slice(0, 160),
     openGraph: {
-      images: [...previousImages],
+      images: images,
     },
   };
 }
 
 async function getEvent(slug: string) {
-  const event = demoEvents.find((event) => event.slug === slug);
+  const request = await fetch(apiRoutes.viewEvent(slug));
 
-  return event;
+  if (request.status === 404) {
+    return undefined;
+  }
+
+  return (await request.json()) as { data: EventData };
 }
 
 export default async function Page({ params }: Props) {
@@ -46,20 +55,21 @@ export default async function Page({ params }: Props) {
 
   return (
     <div>
-      {event.image && (
+      {event.data.image_url && (
         <div className="mb-12">
           <Image
-            src={event.image}
-            alt={event.title}
+            src={event.data.image_url}
+            alt={event.data.title}
             width={500}
-            className="rounded-lg mx-auto"
+            className="rounded-lg mx-auto aspect-video"
             height={600}
+            priority
           />
         </div>
       )}
-      <h1 className="text-5xl text-center font-bold">{event.title}</h1>
+      <h1 className="text-5xl text-center font-bold">{event.data.title}</h1>
 
-      <div className="text-center mt-3 text-lg">{event.description}</div>
+      <div className="text-center mt-3 text-lg">{event.data.description}</div>
     </div>
   );
 }

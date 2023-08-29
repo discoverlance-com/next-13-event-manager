@@ -1,8 +1,9 @@
+import { apiRoutes } from "~/lib/api";
 import Event from "./Event";
-import { demoEvents } from "./demo-events";
 
 async function getAllEvents() {
-  return demoEvents;
+  const request = await fetch(apiRoutes.events);
+  return (await request.json()) as EventResponse;
 }
 
 export default async function Home() {
@@ -18,9 +19,9 @@ export default async function Home() {
 
       <section>
         <h2 className="text-3xl font-semibold mt-12">Upcoming Events</h2>
-        {events.length > 0 ? (
+        {events.data.length > 0 ? (
           <ul className="grid sm:grid-cols-2 lg:grid-cols-3 mt-4 gap-8">
-            {events.map((event) => (
+            {events.data.map((event) => (
               <li key={event.slug}>
                 {/* <Suspense fallback={<p>Loading...</p>}> */}
                 <Event

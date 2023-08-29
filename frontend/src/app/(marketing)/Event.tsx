@@ -2,14 +2,15 @@ import { format, parseISO } from "date-fns";
 import Link from "next/link";
 
 type Props = {
-  title: string;
-  author: string;
-  date: string;
-  slug: string;
-  description?: string;
-  tags?: string[];
-  speakers?: string[];
+  title: EventData["title"];
+  author: EventData["author"];
+  date: EventData["start_at"];
+  slug: EventData["slug"];
+  description?: EventData["description"];
+  tags?: EventData["tags"];
+  speakers?: EventData["speakers"];
 };
+
 const Event = async ({
   title,
   author,
@@ -23,7 +24,7 @@ const Event = async ({
     <article className="rounded-xl bg-gradient-to-r from-slate-200 via-slate-500-500 to-slate-600 p-1 shadow-xl transition hover:shadow-sm">
       <div className="rounded-lg bg-white p-4 pt-16 sm:p-6">
         <div className="space-y-1 mb-2">
-          <span className="font-medium">By: {author}</span>
+          <span className="font-medium">By: {author.name}</span>
           <time dateTime={date} className="block text-xs text-gray-500">
             {format(parseISO(date), "LLLL d, yyyy")}
           </time>
