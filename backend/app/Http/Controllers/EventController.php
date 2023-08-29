@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UpsertEventRequest;
+use App\Http\Resources\EventResource;
 use App\Models\Event;
+use Illuminate\Support\Facades\Cache;
 
 class EventController extends Controller
 {
@@ -17,7 +19,11 @@ class EventController extends Controller
      */
     public function index()
     {
-        return response()->json(Event::upToDate()->paginate(10), 200);
+        return Cache::remember('all_events', 60 * 60 * 24, function () {
+            return EventResource::collection(Event::upToDate()->paginate())
+                ->response()
+                ->setStatusCode(200);
+        });
     }
 
     /**
@@ -28,7 +34,9 @@ class EventController extends Controller
         $data = $request->validated();
         $event = Event::create([...$data, 'user_id' => $request->user()]);
 
-        return response()->json($event, 201);
+        return EventResource::make($event)
+            ->response()
+            ->setStatusCode(201);
     }
 
     /**
@@ -36,7 +44,11 @@ class EventController extends Controller
      */
     public function show(Event $event)
     {
-        return response()->json($event, 200);
+        return Cache::remember($event->slug . '_event', 60 * 60 * 24, function () use ($event) {
+            return EventResource::make($event)
+                ->response()
+                ->setStatusCode(200);
+        });
     }
 
     /**

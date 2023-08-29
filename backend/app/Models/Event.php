@@ -50,11 +50,37 @@ class Event extends Model
      */
     public function scopeUpToDate(Builder $query): void
     {
-        $query->where('end_at', '>', now())->whereNot('status', EventStatus::ARCHIVE);
+        $query->where('end_at', '>', now())
+            ->whereNot('status', EventStatus::ARCHIVE)
+            ->whereNot('status', EventStatus::DRAFT);
+    }
+
+    /**
+     * Scope a query to only include events that are published
+     */
+    public function scopePublished(Builder $query): void
+    {
+        $query->where('status', EventStatus::PUBLISH);
+    }
+
+    /**
+     * Scope a query to only include events that are archived
+     */
+    public function scopeArchived(Builder $query): void
+    {
+        $query->where('status', EventStatus::ARCHIVE);
+    }
+
+    /**
+     * Scope a query to only include events that are drafted
+     */
+    public function scopeDrafted(Builder $query): void
+    {
+        $query->where('status', EventStatus::DRAFT);
     }
 
     public function author(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 }
