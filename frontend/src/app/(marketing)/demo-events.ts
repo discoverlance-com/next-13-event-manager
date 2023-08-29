@@ -24,6 +24,7 @@ export const demoEvents = [
     title: "Event 3",
     slug: "event-3",
     tags: ["Online"],
+    speakers: ["Lance", "Prabakar"],
     description:
       "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolores, cum! Iure, maiores cupiditate quo reprehenderit quae nobis eos vero sequi nostrum magnam alias reiciendis commodi tempore laboriosam omnis a ipsa!",
     author: "Rookie",

@@ -1,17 +1,8 @@
 import AppButton from "~/components/AppButton";
 import AppLinkButton from "~/components/AppLinkButton";
+import TablePagination from "./TablePagination";
 
 const EventsTable = () => {
-  // 'title',
-  // 'start_at',
-  // 'end_at',
-  // 'image_path',
-  // 'tags',
-  // 'speakers',
-  // 'description',
-  // 'slug',
-  // 'status',
-  // 'user_id',
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full divide-y-2 divide-gray-200 text-sm">
@@ -67,26 +58,26 @@ const EventsTable = () => {
               <AppLinkButton
                 href="/dashboard/events/view/1"
                 className="inline-block text-xs"
+                innerSpanClassName="px-2"
               >
                 View
               </AppLinkButton>
               <AppLinkButton
                 href="/dashboard/events/edit/1"
                 className="inline-block text-xs"
+                innerSpanClassName="px-2"
               >
                 Edit
               </AppLinkButton>
-              <AppButton className="inline-block text-xs">Delete</AppButton>
-              {/* <a
-                href="#"
-                className="inline-block rounded bg-indigo-600 px-4 py-2 text-xs font-medium text-white hover:bg-indigo-700"
-              >
-                View
-              </a> */}
+              <AppButton className="inline-block text-xs px-2">
+                Delete
+              </AppButton>
             </td>
           </tr>
         </tbody>
       </table>
+
+      <TablePagination />
     </div>
   );
 };

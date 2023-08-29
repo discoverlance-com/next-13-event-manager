@@ -52,7 +52,7 @@ const Event = async ({
 
         {speakers && speakers.length > 0 && (
           <div className="mt-4 flex flex-wrap gap-1">
-            Speakers:
+            <span className="text-sm">Speakers:</span>
             {speakers.map((speaker) => (
               <span
                 key={speaker}

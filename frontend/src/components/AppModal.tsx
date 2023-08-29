@@ -40,7 +40,7 @@ const AppModal = ({ children }: { children: React.ReactNode }) => {
     >
       <div
         ref={wrapper}
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full sm:w-10/12 md:w-8/12 lg:w-1/2 p-6 border-slate-200 border-4 shadow-inner bg-slate-200 shadow-slate-200"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full sm:w-10/12 md:w-8/12 lg:w-1/2 p-6 border-slate-200 border-4 shadow-inner bg-slate-200 shadow-slate-200 overflow-y-scroll max-h-[400px]"
       >
         {children}
       </div>

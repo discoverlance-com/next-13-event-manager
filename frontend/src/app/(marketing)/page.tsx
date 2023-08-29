@@ -30,6 +30,7 @@ export default async function Home() {
                   author={event.author}
                   description={event.description}
                   tags={event.tags}
+                  speakers={event.speakers}
                 />
                 {/* </Suspense> */}
               </li>

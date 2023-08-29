@@ -10,9 +10,15 @@ interface Props
     "ref"
   > {
   href: string;
+  innerSpanClassName?: string;
 }
 
-const AppLinkButton = ({ className, children, ...props }: Props) => {
+const AppLinkButton = ({
+  className,
+  children,
+  innerSpanClassName,
+  ...props
+}: Props) => {
   return (
     <Link
       className={cn(
@@ -21,7 +27,12 @@ const AppLinkButton = ({ className, children, ...props }: Props) => {
       )}
       {...props}
     >
-      <span className="block rounded-lg bg-white px-5 py-2 hover:bg-transparent">
+      <span
+        className={cn(
+          "block rounded-lg bg-white px-5 py-2 hover:bg-transparent",
+          innerSpanClassName
+        )}
+      >
         {children}
       </span>
     </Link>
