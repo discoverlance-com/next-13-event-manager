@@ -19,7 +19,7 @@ const DashboardNav = () => {
       <ul className="flex gap-6">
         <li>
           <Link
-            href="/"
+            href="/dashboard"
             className={cn(
               "text-gray-700 px-3 py-2 transition-all duration-300"
             )}

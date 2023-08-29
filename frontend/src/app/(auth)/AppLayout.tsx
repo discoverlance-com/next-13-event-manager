@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import DashboardNav from "./DashboardNav";
+import Image from "next/image";
 
 type Props = { children: React.ReactNode };
 
@@ -10,8 +11,8 @@ const AppLayout = ({ children }: Props) => {
     <div>
       <DashboardNav />
 
-      <div className="flex gap-8">
-        <div className="flex h-[calc(100vh-56px)] flex-col justify-between border-e bg-slate-200/50 w-96 shadow">
+      <div className="flex gap-8 h-[calc(100vh-56px)]">
+        <div className="flex flex-col justify-between border-e bg-slate-200/50 w-96 shadow">
           <div className="px-4 py-6">
             <ul className="space-y-1">
               <li>
@@ -59,7 +60,7 @@ const AppLayout = ({ children }: Props) => {
                         href="/dashboard/events/create"
                         className="block rounded-lg px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700"
                       >
-                        Add
+                        Create
                       </Link>
                     </li>
                   </ul>
@@ -73,10 +74,12 @@ const AppLayout = ({ children }: Props) => {
               href="/dashboard/profile"
               className="flex items-center gap-2 bg-slate-200 p-4 hover:bg-slate-50"
             >
-              <img
+              <Image
                 alt="Man"
                 src="https://images.unsplash.com/photo-1600486913747-55e5470d6f40?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
                 className="h-10 w-10 rounded-full object-cover"
+                width={40}
+                height={40}
               />
 
               <div>
@@ -89,7 +92,7 @@ const AppLayout = ({ children }: Props) => {
             </Link>
           </div>
         </div>
-        <main className="pt-8 overflow-y-scroll">{children}</main>
+        <main className="pt-8 pr-8 overflow-y-scroll w-full">{children}</main>
       </div>
     </div>
   );
