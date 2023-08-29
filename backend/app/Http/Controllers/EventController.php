@@ -20,7 +20,7 @@ class EventController extends Controller
     public function index()
     {
         return Cache::remember('all_events', 60 * 60 * 24, function () {
-            return EventResource::collection(Event::upToDate()->paginate())
+            return EventResource::collection(Event::upToDate()->get())
                 ->response()
                 ->setStatusCode(200);
         });
