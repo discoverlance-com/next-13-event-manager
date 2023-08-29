@@ -16,7 +16,7 @@ export default function NotFoundPage() {
         </p>
 
         <p className="my-4 text-gray-500">
-          We can't find the event you are looking for.
+          We can&apos;t find the event you are looking for.
         </p>
 
         <AppLinkButton href="/">Return Home</AppLinkButton>

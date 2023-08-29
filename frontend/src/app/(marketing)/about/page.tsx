@@ -22,9 +22,9 @@ export default async function Page() {
 
       <p>
         With our experience and expertise, we strive to deliver exceptional
-        service and exceed our clients' expectations. Whether it's a corporate
-        conference or a social gathering, our event management system is
-        designed to streamline the entire event planning process and create
+        service and exceed our clients&apos; expectations. Whether it&apos;s a
+        corporate conference or a social gathering, our event management system
+        is designed to streamline the entire event planning process and create
         unforgettable experiences.
       </p>
     </div>

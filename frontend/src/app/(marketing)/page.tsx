@@ -21,10 +21,9 @@ export default async function Home() {
         {events.length > 0 ? (
           <ul className="grid sm:grid-cols-2 lg:grid-cols-3 mt-4 gap-8">
             {events.map((event) => (
-              <li>
+              <li key={event.slug}>
                 {/* <Suspense fallback={<p>Loading...</p>}> */}
                 <Event
-                  key={event.slug}
                   date={event.start_at}
                   title={event.title}
                   slug={event.slug}

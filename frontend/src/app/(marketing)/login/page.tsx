@@ -1,4 +1,5 @@
 import { type Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import AppButton from "~/components/AppButton";
 
@@ -12,7 +13,7 @@ export default async function Page() {
       <h1 className="text-center text-5xl font-bold">Login</h1>
 
       <p>
-        Don't have an account yet?{" "}
+        Don&apos;t have an account yet?{" "}
         <Link href="/register" className="underline">
           Register
         </Link>
@@ -21,10 +22,11 @@ export default async function Page() {
       <section className="bg-white">
         <div className="lg:grid lg:grid-cols-12">
           <aside className="relative block h-16 lg:order-last lg:col-span-5 lg:h-full xl:col-span-6">
-            <img
+            <Image
               alt="Pattern"
               src="https://images.unsplash.com/photo-1605106702734-205df224ecce?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"
               className="absolute inset-0 h-full w-full object-cover"
+              fill
             />
           </aside>
 

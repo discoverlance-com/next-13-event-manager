@@ -15,7 +15,7 @@ export default function NotFoundPage() {
           Uh-oh!
         </p>
 
-        <p className="my-4 text-gray-500">We can't find that page.</p>
+        <p className="my-4 text-gray-500">We can&lsquo;t find that page.</p>
 
         <AppLinkButton href="/">Return Home</AppLinkButton>
       </div>
