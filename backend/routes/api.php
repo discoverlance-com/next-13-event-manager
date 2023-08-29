@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\ListEventStatsController;
 use App\Http\Controllers\ListUserEventsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -24,6 +25,7 @@ Route::group([
         return $request->user();
     })->name('api.user');
 
+    Route::get('/events/stats', ListEventStatsController::class)->name('events.stats');
+    Route::get('/events/my-events', ListUserEventsController::class)->name('my-events');
     Route::apiResource('events', EventController::class);
-    Route::get('/my-events', ListUserEventsController::class)->name('my-events');
 });
