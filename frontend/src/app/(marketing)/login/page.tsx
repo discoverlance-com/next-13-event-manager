@@ -1,7 +1,7 @@
 import { type Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import AppButton from "~/components/AppButton";
+import LoginForm from "./LoginForm";
 
 export const metadata: Metadata = {
   title: "Login - EMS",
@@ -27,48 +27,13 @@ export default async function Page() {
               src="https://images.unsplash.com/photo-1605106702734-205df224ecce?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"
               className="absolute inset-0 h-full w-full object-cover"
               fill
+              priority
             />
           </aside>
 
           <div className="flex items-center lg:col-span-7 lg:py-12 xl:col-span-6">
             <div>
-              <form action="#" className="mt-8 grid grid-cols-6 gap-6">
-                <div className="col-span-6">
-                  <label
-                    htmlFor="email"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Email
-                  </label>
-
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
-                  />
-                </div>
-
-                <div className="col-span-6">
-                  <label
-                    htmlFor="Password"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Password
-                  </label>
-
-                  <input
-                    type="password"
-                    id="Password"
-                    name="password"
-                    className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
-                  />
-                </div>
-
-                <div className="col-span-6">
-                  <AppButton type="submit">Login</AppButton>
-                </div>
-              </form>
+              <LoginForm />
             </div>
           </div>
         </div>

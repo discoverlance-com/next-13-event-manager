@@ -1,6 +1,6 @@
 import AppLayout from "./AppLayout";
 
-export default function AuthLayout({
+export default async function AuthLayout({
   children,
 }: {
   children: React.ReactNode;

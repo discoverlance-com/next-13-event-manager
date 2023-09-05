@@ -7,7 +7,7 @@ An event manager app with authentication and database with Neon
 ### Prerequisites
 
 1. PHP - v8.2.8 (v8.1 should also work)
-2. Node - v18
+2. Node - v16 (if you are using nvm, first run nvm use to use the nvm config in the frontend directory to set v16.20.1)
 
 ### Setting up
 

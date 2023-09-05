@@ -8,11 +8,7 @@ interface EventData {
   slug: string;
   image_url?: string;
   description?: string;
-  author: {
-    id: number;
-    name: string;
-    email: string;
-  };
+  author: User;
 }
 
 interface EventResponse {
@@ -39,4 +35,10 @@ type EventMeta = {
   per_page: number;
   to: number;
   total: number;
+};
+
+type User = {
+  id: number;
+  name: string;
+  email: string;
 };

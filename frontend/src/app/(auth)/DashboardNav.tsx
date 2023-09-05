@@ -1,15 +1,25 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import AppLinkButton from "~/components/AppLinkButton";
+import { redirect, usePathname } from "next/navigation";
+import { experimental_useFormStatus as useFormStatus } from "react-dom";
 
+import AppLinkButton from "~/components/AppLinkButton";
 import { cn } from "~/lib/utils";
+import { logoutAction } from "./dashboard/actions";
+import AppButton from "~/components/AppButton";
 
 const DashboardNav = () => {
   const pathname = usePathname();
+  const { pending } = useFormStatus();
 
   const isActiveLink = (href: string) => href === pathname;
+
+  async function onLogout(formData: FormData) {
+    await logoutAction(formData);
+
+    redirect("/");
+  }
 
   return (
     <nav
@@ -41,8 +51,10 @@ const DashboardNav = () => {
       </div>
 
       <div className="flex gap-4 items-center">
-        <form method="POST" action="/api/dashboard/logout">
-          <AppLinkButton href="/login">Logout</AppLinkButton>
+        <form action={onLogout}>
+          <AppButton type="submit" disabled={pending} loading={pending}>
+            Logout
+          </AppButton>
         </form>
       </div>
     </nav>

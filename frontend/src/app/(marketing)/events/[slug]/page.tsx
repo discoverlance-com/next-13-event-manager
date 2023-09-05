@@ -37,7 +37,9 @@ export async function generateMetadata(
 }
 
 async function getEvent(slug: string) {
-  const request = await fetch(apiRoutes.viewEvent(slug));
+  const request = await fetch(apiRoutes.viewEvent(slug), {
+    next: { tags: ["viewEvent"] },
+  });
 
   if (request.status === 404) {
     return undefined;

@@ -1,6 +1,8 @@
+import { requireUser } from "~/lib/auth";
+
 import RenderParallelRoute from "./RenderParallelRoute";
 
-export default function Layout({
+export default async function Layout({
   children,
   analytics,
   stats,
@@ -9,6 +11,8 @@ export default function Layout({
   analytics: React.ReactNode;
   stats: React.ReactNode;
 }) {
+  await requireUser();
+
   return (
     <div className="space-y-12">
       <div>{children}</div>

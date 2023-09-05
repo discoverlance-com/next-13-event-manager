@@ -2,7 +2,7 @@ import { apiRoutes } from "~/lib/api";
 import Event from "./Event";
 
 async function getAllEvents() {
-  const request = await fetch(apiRoutes.events);
+  const request = await fetch(apiRoutes.events, { next: { tags: ["events"] } });
   return (await request.json()) as EventResponse;
 }
 
