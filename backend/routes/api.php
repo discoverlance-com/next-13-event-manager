@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ListEventStatsController;
 use App\Http\Controllers\ListUserEventsController;
@@ -25,7 +26,10 @@ Route::group([
     ], function () {
         Route::get('/user', function (Request $request) {
             return $request->user();
-        })->name('api.user');
+        })->name('user');
+
+        Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
+            ->name('logout');
 
         Route::get('/events/stats', ListEventStatsController::class)->name('events.stats');
         Route::get('/events/my-events', ListUserEventsController::class)->name('my-events');
