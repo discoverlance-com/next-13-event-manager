@@ -2,12 +2,15 @@ import { type Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import LoginForm from "./LoginForm";
+import { redirectIfAuthenticated } from "~/lib/auth";
 
 export const metadata: Metadata = {
   title: "Login - EMS",
 };
 
 export default async function Page() {
+  await redirectIfAuthenticated();
+
   return (
     <div className="space-y-6">
       <h1 className="text-center text-5xl font-bold">Login</h1>

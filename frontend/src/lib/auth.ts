@@ -7,14 +7,11 @@ import { AxiosError } from "axios";
 
 export const requireUser = async () => {
   const apiToken = cookies().get("apiToken")?.value;
+  if (!apiToken) {
+    redirect("/login");
+  }
   try {
-    const user = await axios.get(apiRoutes.auth.user, {
-      headers: {
-        Authorization: `Bearer ${apiToken}`,
-      },
-    });
-
-    return user.data as User;
+    return await getUser();
   } catch (error) {
     const err = error as AxiosError;
 
@@ -28,4 +25,23 @@ export const requireUser = async () => {
 
     redirect("/login");
   }
+};
+
+export const getUser = async () => {
+  const apiToken = cookies().get("apiToken")?.value;
+
+  const user = await axios.get(apiRoutes.auth.user, {
+    headers: {
+      Authorization: `Bearer ${apiToken}`,
+    },
+  });
+
+  return user.data as User;
+};
+
+export const redirectIfAuthenticated = async () => {
+  try {
+    const user = await getUser();
+    redirect("/dashboard");
+  } catch (error) {}
 };

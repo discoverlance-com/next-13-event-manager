@@ -3,12 +3,15 @@ import Image from "next/image";
 import Link from "next/link";
 
 import RegisterForm from "./RegisterForm";
+import { redirectIfAuthenticated } from "~/lib/auth";
 
 export const metadata: Metadata = {
   title: "Register - EMS",
 };
 
 export default async function Page() {
+  await redirectIfAuthenticated();
+
   return (
     <div className="space-y-6">
       <h1 className="text-center text-5xl font-bold">Register</h1>

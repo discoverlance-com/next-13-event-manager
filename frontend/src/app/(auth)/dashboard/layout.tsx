@@ -1,5 +1,4 @@
 import { requireUser } from "~/lib/auth";
-
 import RenderParallelRoute from "./RenderParallelRoute";
 
 export default async function Layout({
