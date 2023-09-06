@@ -20,7 +20,7 @@ class EventResource extends JsonResource
             'start_at' => $this->start_at,
             'end_at' => $this->end_at,
             'image_url' => $this->when(
-                Storage::disk('public')->has($this->image_path),
+                Storage::disk('public')->has($this->image_path || ''),
                 Storage::disk('public')->url($this->image_path)
             ),
             'tags' => $this->tags,

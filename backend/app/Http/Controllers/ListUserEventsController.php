@@ -15,7 +15,7 @@ class ListUserEventsController extends Controller
     {
         //
         $this->authorize('viewAny', Event::class);
-        return EventResource::collection(Event::where('user_id', $request->user()->id)->paginate())
+        return EventResource::collection(Event::where('user_id', $request->user()->id)->paginate(10))
                 ->response()
                 ->setStatusCode(200);
     }

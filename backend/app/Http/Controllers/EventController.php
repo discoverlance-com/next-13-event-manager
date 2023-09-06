@@ -32,7 +32,8 @@ class EventController extends Controller
     public function store(UpsertEventRequest $request)
     {
         $data = $request->validated();
-        $event = Event::create([...$data, 'user_id' => $request->user()]);
+        //TODO: save/store file if present
+        $event = Event::create([...$data, 'user_id' => $request->user()->id]);
 
         return EventResource::make($event)
             ->response()
