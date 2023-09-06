@@ -86,10 +86,10 @@ export default async function Page({ params, searchParams }: Props) {
             </div>
             <p>
               Start At:{" "}
-              {format(parseISO(event.data.start_at), "mm/dd/yyyy H:m")}
+              {format(parseISO(event.data.start_at), "MM/dd/yyyy H:m")}
             </p>
             <p>
-              End At: {format(parseISO(event.data.end_at), "mm/dd/yyyy H:m")}
+              End At: {format(parseISO(event.data.end_at), "MM/dd/yyyy H:m")}
             </p>
             <p>STATUS: {event.data.status}</p>
 

@@ -21,7 +21,9 @@ const eventSchema = z
     start_at: z.string().min(1, "Start at is required"),
     end_at: z.string().min(1, "End at is required"),
     status: z.enum(["publish", "archive", "draft"]),
-    speakers: z.string().transform((data) => data.split(",")),
+    speakers: z
+      .string()
+      .transform((data) => (data.length > 0 ? data.split(",") : data)),
     tags: z
       .string()
       .transform((data) => (data.length > 0 ? data.split(",") : data))
@@ -45,7 +47,7 @@ const eventSchema = z
     path: ["end_at"],
   });
 
-export async function upsertEventAction(formData: FormData) {
+export async function upsertEventAction(formData: FormData, slug = "") {
   try {
     const parsed = eventSchema.parse({
       title: formData.get("title"),
@@ -60,13 +62,23 @@ export async function upsertEventAction(formData: FormData) {
 
     const apiToken = cookies().get("apiToken")?.value;
 
-    await axios.post(apiRoutes.auth.events.create, parsed, {
-      headers: {
-        Authorization: `Bearer ${apiToken}`,
-        "Content-Type": "multipart/form-data",
-      },
-    });
-    return { success: true, message: "Event created" };
+    if (slug && slug.length > 0) {
+      await axios.put(apiRoutes.auth.events.edit(slug), parsed, {
+        headers: {
+          Authorization: `Bearer ${apiToken}`,
+          // "Content-Type": "multipart/form-data",
+        },
+      });
+    } else {
+      await axios.post(apiRoutes.auth.events.create, parsed, {
+        headers: {
+          Authorization: `Bearer ${apiToken}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+    }
+
+    return { success: true, message: "Event updated" };
   } catch (error) {
     if (error instanceof z.ZodError) {
       return {
@@ -98,7 +110,7 @@ export async function upsertEventAction(formData: FormData) {
     return {
       success: false,
       message:
-        "Unknown error occured whilst creating event. Pleast try again later.",
+        "Unknown error occured whilst updating event. Pleast try again later.",
     };
   }
 }

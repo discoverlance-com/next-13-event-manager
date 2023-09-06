@@ -10,7 +10,8 @@ import AppTextInput from "~/components/AppTextInput";
 import { upsertEventAction } from "./actions";
 import { cn } from "~/lib/utils";
 import { getFormFieldError } from "~/utils/form";
-import { revalidateTag } from "next/cache";
+import { revalidatePath } from "next/cache";
+import { format, parseISO } from "date-fns";
 
 type Props = {
   data?: EventData;
@@ -23,11 +24,11 @@ const EventForm = ({ data }: Props) => {
   const [formStatus, setFormStatus] = useState("");
 
   async function onUpsert(formData: FormData) {
-    const result = await upsertEventAction(formData);
+    const result = await upsertEventAction(formData, data?.slug);
 
     if (result.success) {
-      revalidateTag("events");
-      revalidateTag("myEvents");
+      revalidatePath("/");
+      revalidatePath("/dashboard/events");
       redirect("/dashboard/events");
     } else {
       setFormErrors(result.fieldErrors);
@@ -49,6 +50,7 @@ const EventForm = ({ data }: Props) => {
           name="title"
           label="Title"
           type="text"
+          defaultValue={data?.title}
           required
           error={getFormFieldError("title", formErrors)}
         />
@@ -56,6 +58,10 @@ const EventForm = ({ data }: Props) => {
           name="start_at"
           label="Start at"
           type="datetime-local"
+          defaultValue={
+            data?.start_at &&
+            format(parseISO(data?.start_at), "yyyy-MM-dd'T'HH:mm")
+          }
           required
           error={getFormFieldError("start_at", formErrors)}
         />
@@ -63,6 +69,9 @@ const EventForm = ({ data }: Props) => {
           name="end_at"
           label="End at"
           type="datetime-local"
+          defaultValue={
+            data?.end_at && format(parseISO(data?.end_at), "yyyy-MM-dd'T'HH:mm")
+          }
           required
           error={getFormFieldError("end_at", formErrors)}
         />
@@ -72,6 +81,7 @@ const EventForm = ({ data }: Props) => {
           label="Tags"
           type="text"
           helperText="Separate each tag with a comma, example: food,music"
+          defaultValue={data?.tags?.join(",")}
           error={getFormFieldError("tags", formErrors)}
         />
 
@@ -81,6 +91,7 @@ const EventForm = ({ data }: Props) => {
           type="text"
           required
           helperText="Separate each speaker with a comma, example: John,Sarah"
+          defaultValue={data?.speakers?.join(",")}
           error={getFormFieldError("speakers", formErrors)}
         />
 
@@ -88,6 +99,7 @@ const EventForm = ({ data }: Props) => {
           label="Status"
           name="status"
           required
+          defaultValue={data?.status}
           error={getFormFieldError("status", formErrors)}
         >
           <option value="draft">Draft</option>
@@ -99,6 +111,7 @@ const EventForm = ({ data }: Props) => {
           label="Description"
           name="description"
           rows={5}
+          defaultValue={data?.description}
           error={getFormFieldError("description", formErrors)}
         />
 

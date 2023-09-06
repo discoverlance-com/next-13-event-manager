@@ -58,7 +58,8 @@ class EventController extends Controller
     public function update(UpsertEventRequest $request, Event $event)
     {
         $data = $request->validated();
-        $event->update([...$data, $request->user()]);
+        // TODO: update stored file if file is in request
+        $event->update([...$data]);
 
         return response()->json([], 204);
     }

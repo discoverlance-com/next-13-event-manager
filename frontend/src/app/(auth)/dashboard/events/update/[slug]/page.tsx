@@ -1,6 +1,10 @@
 import { type Metadata, type ResolvingMetadata } from "next";
+import { cookies } from "next/headers";
+import { notFound } from "next/navigation";
+
 import EventForm from "~/app/(auth)/dashboard/events/EventForm";
 import EventsTable from "../../EventsTable";
+import { apiRoutes } from "~/lib/api";
 
 type Props = {
   params: { slug: string };
@@ -8,15 +12,56 @@ type Props = {
 };
 
 export async function generateMetadata(
-  { params, searchParams }: Props,
+  { params }: Props,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
+  // fetch data
+  const event = await getEvent(params.slug);
+
+  // optionally access and extend (rather than replace) parent metadata
+  const previousImages = (await parent).openGraph?.images || [];
+
+  const images = event?.data?.image_url
+    ? new URL(event.data.image_url)
+    : previousImages;
+
+  const title = event?.data.title + " - Update Event";
   return {
-    title: "Some Event - Edit Event",
+    title: title,
+    description: event?.data?.description?.slice(0, 160),
+    openGraph: {
+      images: images,
+    },
+    twitter: {
+      images: images,
+      title: title,
+      description: event?.data?.description?.slice(0, 160),
+    },
   };
 }
 
-export default function Page({ params, searchParams }: Props) {
+async function getEvent(slug: string) {
+  const apiToken = cookies().get("apiToken")?.value;
+  const request = await fetch(apiRoutes.auth.events.edit(slug), {
+    headers: {
+      Authorization: `Bearer ${apiToken}`,
+    },
+  });
+
+  if (request.status === 404) {
+    return undefined;
+  }
+
+  return (await request.json()) as { data: EventData };
+}
+
+export default async function Page({ params, searchParams }: Props) {
+  const event = await getEvent(params.slug);
+
+  if (event === undefined) {
+    notFound();
+  }
+
   return (
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-5 lg:gap-8 w-full">
       <div className="rounded-lg bg-gray-100 shadow-inner lg:col-span-3">
@@ -27,7 +72,7 @@ export default function Page({ params, searchParams }: Props) {
           <h1 className="text-3xl font-bold text-center">Edit Event</h1>
 
           <div className="mt-8">
-            <EventForm />
+            <EventForm data={event.data} />
           </div>
         </div>
       </div>
