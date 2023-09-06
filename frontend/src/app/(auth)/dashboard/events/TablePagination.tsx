@@ -1,114 +1,117 @@
+"use client";
+
+import { useCreateQueryString } from "~/hooks/useCreateQueryString";
 import { cn } from "~/lib/utils";
 
-const TablePagination = () => {
-  const active: number = 1;
+type Props = {
+  meta: EventResponse["meta"];
+};
+
+const TablePagination = ({ meta }: Props) => {
+  const createQueryString = useCreateQueryString();
+
+  const previousPage = meta?.links?.filter((link) =>
+    link.label.includes("Previous")
+  )[0];
+
+  const nextPage = meta?.links?.filter((link) =>
+    link.label.includes("Next")
+  )[0];
+
   return (
     <div>
       <div className="flex items-center justify-between border-t border-gray-200 px-4 py-3 sm:px-6 mt-8">
         <div className="flex flex-1 justify-between sm:hidden">
-          <a
-            href="#"
-            className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-          >
-            Previous
-          </a>
-          <a
-            href="#"
-            className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-          >
-            Next
-          </a>
+          {previousPage && previousPage.url ? (
+            <a
+              href={createQueryString([
+                {
+                  name: "page",
+                  value:
+                    new URL(previousPage.url!).searchParams.get("page") ?? "",
+                },
+              ])}
+              className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+            >
+              <span dangerouslySetInnerHTML={{ __html: previousPage.label }} />
+            </a>
+          ) : null}
+
+          {nextPage && nextPage.url ? (
+            <a
+              href={createQueryString([
+                {
+                  name: "page",
+                  value: new URL(nextPage.url!).searchParams.get("page") ?? "",
+                },
+              ])}
+              className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+            >
+              <span dangerouslySetInnerHTML={{ __html: nextPage.label }} />
+            </a>
+          ) : null}
         </div>
         <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
           <div>
-            <p className="text-sm text-gray-700">
-              Showing <span className="font-medium">1</span> to{" "}
-              <span className="font-medium">10</span> of{" "}
-              <span className="font-medium">97</span> results
-            </p>
+            {meta?.total && meta.total > 0 ? (
+              <p className="text-sm text-gray-700 transition duration-300">
+                Showing <span className="font-medium">{meta?.from}</span> to{" "}
+                <span className="font-medium">{meta?.to}</span> of{" "}
+                <span className="font-medium">{meta?.total}</span> results
+              </p>
+            ) : (
+              ""
+            )}
           </div>
           <div>
             <nav
               className="isolate inline-flex -space-x-px rounded-md shadow-sm"
               aria-label="Pagination"
             >
-              <a
-                href="#"
-                className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-500 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-              >
-                <span className="sr-only">Previous</span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
-                  aria-hidden="true"
-                  viewBox="0 0 512 512"
-                >
-                  <path d="M512 256A256 256 0 1 0 0 256a256 256 0 1 0 512 0zM271 135c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-87 87 87 87c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0L167 273c-9.4-9.4-9.4-24.6 0-33.9L271 135z" />
-                </svg>
-              </a>
-              <a
-                href="#"
-                aria-current="page"
-                className={cn(
-                  "relative hidden items-center px-4 py-2 text-sm font-semibold focus:z-20 first-of-type:inline-flex md:inline-flex",
-                  {
-                    "text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0":
-                      active !== 1,
-                    "z-10 bg-indigo-600 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600":
-                      active === 1,
-                  }
-                )}
-              >
-                1
-              </a>
-              <a
-                href="#"
-                aria-current="page"
-                className={cn(
-                  "relative hidden items-center px-4 py-2 text-sm font-semibold focus:z-20 first-of-type:inline-flex md:inline-flex",
-                  {
-                    "text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0":
-                      active !== 2,
-                    "z-10 bg-indigo-600 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600":
-                      active === 2,
-                  }
-                )}
-              >
-                2
-              </a>
-              <a
-                href="#"
-                aria-current="page"
-                className={cn(
-                  "relative hidden items-center px-4 py-2 text-sm font-semibold focus:z-20 first-of-type:inline-flex md:inline-flex",
-                  {
-                    "text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0":
-                      active !== 3,
-                    "z-10 bg-indigo-600 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600":
-                      active === 3,
-                  }
-                )}
-              >
-                3
-              </a>
+              {meta?.links && meta.links.length > 0
+                ? meta.links
+                    .filter((link) => link.url !== null)
+                    .map((link) => (
+                      <a
+                        href={createQueryString([
+                          {
+                            name: "page",
+                            value:
+                              link.label.includes("Next") ||
+                              link.label.includes("Previous")
+                                ? new URL(link.url!).searchParams.get("page") ??
+                                  ""
+                                : link.label,
+                          },
+                        ])}
+                        key={link.label}
+                        aria-current={link.active}
+                        className={cn(
+                          "relative items-center px-4 py-2 text-sm font-semibold focus:z-20",
+                          {
+                            "text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0":
+                              !link.active,
+                            "z-10 bg-indigo-600 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600":
+                              link.active,
+                            "inline-flex":
+                              link.label.includes("Previous") ||
+                              link.label.includes("Next"),
+                            "hidden md:inline-flex first-of-type:inline-flex":
+                              !link.label.includes("Previous") &&
+                              !link.label.includes("Next"),
+                          }
+                        )}
+                      >
+                        <span
+                          dangerouslySetInnerHTML={{ __html: link.label }}
+                        />
+                      </a>
+                    ))
+                : null}
+
               {/* <span className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-700 ring-1 ring-inset ring-gray-300 focus:outline-offset-0">
                 ...
               </span> */}
-
-              <a
-                href="#"
-                className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-500 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-              >
-                <span className="sr-only">Next</span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 512 512"
-                  className="h-5 w-5"
-                  aria-hidden="true"
-                >
-                  <path d="M0 256a256 256 0 1 0 512 0A256 256 0 1 0 0 256zM241 377c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l87-87-87-87c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L345 239c9.4 9.4 9.4 24.6 0 33.9L241 377z" />
-                </svg>
-              </a>
             </nav>
           </div>
         </div>

@@ -1,8 +1,38 @@
+import { cookies } from "next/headers";
+import { format, parseISO } from "date-fns";
+
 import AppButton from "~/components/AppButton";
 import AppLinkButton from "~/components/AppLinkButton";
 import TablePagination from "./TablePagination";
+import { apiRoutes } from "~/lib/api";
+import { NextSearchParams } from "./page";
 
-const EventsTable = () => {
+async function getEvents(searchParams: NextSearchParams) {
+  const apiToken = cookies().get("apiToken")?.value;
+
+  const page = searchParams.page;
+  const url = new URL(apiRoutes.auth.events.myEvents);
+  if (page && typeof page == "string") {
+    url.searchParams.set("page", page);
+  }
+
+  const response = await fetch(url.toString(), {
+    headers: {
+      Authorization: `Bearer ${apiToken}`,
+    },
+    next: { tags: ["myEvents"] },
+  });
+
+  return (await response.json()) as EventResponse;
+}
+
+const EventsTable = async ({
+  searchParams,
+}: {
+  searchParams: NextSearchParams;
+}) => {
+  const { data, meta } = await getEvents(searchParams);
+
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full divide-y-2 divide-gray-200 text-sm">
@@ -34,50 +64,63 @@ const EventsTable = () => {
         </thead>
 
         <tbody className="divide-y divide-gray-200">
-          <tr>
-            <td className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
-              John Doe
-            </td>
-            <td className="whitespace-nowrap px-4 py-2 text-gray-700">
-              24/05/1995
-            </td>
-            <td className="whitespace-nowrap px-4 py-2 text-gray-700">
-              24/06/1995
-            </td>
-            <td className="whitespace-nowrap px-4 py-2 text-gray-700">Image</td>
-            <td className="whitespace-nowrap px-4 py-2 text-gray-700">
-              computer, ghana
-            </td>
-            <td className="whitespace-nowrap px-4 py-2 text-gray-700">
-              lance, armah
-            </td>
-            <td className="whitespace-nowrap px-4 py-2 text-gray-700">
-              PUBLISHED
-            </td>
-            <td className="whitespace-nowrap px-4 py-2 flex gap-4">
-              <AppLinkButton
-                href="/dashboard/events/view/1"
-                className="inline-block text-xs"
-                innerSpanClassName="px-2"
+          {data.length > 0 ? (
+            data.map((event) => (
+              <tr key={event.slug}>
+                <td className="whitespace-nowrap px-4 py-2 font-medium first-of-type:text-gray-900 text-gray-700">
+                  {event.title}
+                </td>
+                <td className="whitespace-nowrap px-4 py-2 text-gray-700">
+                  {format(parseISO(event.start_at), "d/m/yyyy H:m")}
+                </td>
+                <td className="whitespace-nowrap px-4 py-2 text-gray-700">
+                  {format(parseISO(event.end_at), "d/m/yyyy H:m")}
+                </td>
+                <td className="whitespace-nowrap px-4 py-2 text-gray-700"></td>
+                <td className="whitespace-nowrap px-4 py-2 text-gray-700">
+                  {event.tags?.join(", ")}
+                </td>
+                <td className="whitespace-nowrap px-4 py-2 text-gray-700">
+                  {event.speakers?.join(", ")}
+                </td>
+                <td className="uppercase whitespace-nowrap px-4 py-2 text-gray-700">
+                  {event.status}
+                </td>
+                <td className="whitespace-nowrap px-4 py-2 flex gap-4">
+                  <AppLinkButton
+                    href={`/dashboard/events/view/${event.slug}`}
+                    className="inline-block text-xs"
+                    innerSpanClassName="px-2"
+                  >
+                    View
+                  </AppLinkButton>
+                  <AppLinkButton
+                    href={`/dashboard/events/update/${event.slug}`}
+                    className="inline-block text-xs"
+                    innerSpanClassName="px-2"
+                  >
+                    Edit
+                  </AppLinkButton>
+                  <AppButton className="inline-block text-xs px-2">
+                    Delete
+                  </AppButton>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td
+                colSpan={6}
+                className="whitespace-nowrap px-4 py-2 text-gray-700"
               >
-                View
-              </AppLinkButton>
-              <AppLinkButton
-                href="/dashboard/events/edit/1"
-                className="inline-block text-xs"
-                innerSpanClassName="px-2"
-              >
-                Edit
-              </AppLinkButton>
-              <AppButton className="inline-block text-xs px-2">
-                Delete
-              </AppButton>
-            </td>
-          </tr>
+                No Events available
+              </td>
+            </tr>
+          )}
         </tbody>
       </table>
 
-      <TablePagination />
+      <TablePagination meta={meta} />
     </div>
   );
 };
