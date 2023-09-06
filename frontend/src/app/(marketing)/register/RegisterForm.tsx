@@ -6,7 +6,6 @@ import { useState } from "react";
 import AppTextInput from "~/components/AppTextInput";
 import { registerAction } from "~/app/(marketing)/register/actions";
 import AppButton from "~/components/AppButton";
-
 import { getFormFieldError } from "~/utils/form";
 import { cn } from "~/lib/utils";
 

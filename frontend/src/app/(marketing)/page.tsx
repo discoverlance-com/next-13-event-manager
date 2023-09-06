@@ -8,6 +8,7 @@ async function getAllEvents() {
 
 export default async function Home() {
   const events = await getAllEvents();
+
   return (
     <div>
       <h1 className="text-5xl text-center font-bold">

@@ -1,5 +1,4 @@
 import { notFound } from "next/navigation";
-import { demoEvents } from "../../demo-events";
 
 import { Metadata, ResolvingMetadata } from "next";
 import Image from "next/image";
@@ -32,6 +31,11 @@ export async function generateMetadata(
     description: event?.data?.description?.slice(0, 160),
     openGraph: {
       images: images,
+    },
+    twitter: {
+      images: images,
+      title: event?.data?.title,
+      description: event?.data?.description?.slice(0, 160),
     },
   };
 }
